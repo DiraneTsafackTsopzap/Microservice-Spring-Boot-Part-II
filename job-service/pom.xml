@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.3.3</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.microservice</groupId>
+	<artifactId>job-service</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>job-service</name>
+	<description>Creation de Job - Service </description>
+	<url/>
+	<licenses>
+		<license/>
+	</licenses>
+	<developers>
+		<developer/>
+	</developers>
+	<scm>
+		<connection/>
+		<developerConnection/>
+		<tag/>
+		<url/>
+	</scm>
+	<properties>
+		<java.version>22</java.version>
+		<!--- 6.2 Version du Spring Cloud -->
+		<spring-cloud.version>2023.0.3</spring-cloud.version>
+		<!--- Puis Definir les Conf ds application.properties-->
+	</properties>
+	<dependencies>
+
+
+		<!--- 1 - Dependance Spring Boot Starter Web -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<!--- 2 - Dependance Spring Boot Starter Test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+		<!--- 3 - Dependance Boot  Starter Data JPA utile lorsq on desire use une Base de Donnees -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
+
+
+		<!--- 4-   Dependance H2-Database  -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+
+		<!--- 5-   Dependance de rafraichissement automatique  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+
+		<!--- 6- Dependance eureka client , ne place que cette dependance si et seulement si on a un register-service -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+
+		<!--- 7- Dependance OpenFeing Client -->
+		<!--- 7.1 Placer L'annotation ds le Main Application Java -->
+		<dependency>
+		   <groupId>org.springframework.cloud</groupId>
+		   <artifactId>spring-cloud-starter-openfeign</artifactId>
+	    </dependency>
+
+		<!--- 8. Utiliser now un Docker Compose et utiliser postgresql : -->
+		<!--- 8.1 si on use postgresql ici comme Base de donnees , alors bien vouloir definir les config ds application.properties -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+
+		<!--- 9- Dependance Zipkin -->
+		<!--- sassurer k son image figure ds le dockercompose-->
+		<!--- Il existent 3 dependances permettant le bon Fonctionnement de Zipkin -->
+		<!--- 9.1 Dependance actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<!-- 11.1 Dependance pour rabbit mq  -->
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- 11.2- Dependance Starter amqp  -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+		<!-- 11.3- s'assurer que la dependance boot-starter-test est presente  -->
+		<!-- 11.4-  Placer le rabbitMq ds le Docker-Compose  -->
+
+
+
+
+
+
+		<!--- 8. Utiliser Zipkin , on va use un Docker run de l'image -->
+		<!--- docker run -d -p 9411:9411 openzipkin/zipkin-->
+
+
+
+		<dependency>
+            <groupId>com.microservice</groupId>
+            <artifactId>compagny-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+
+
+		<!--- 10-   Dependance Cloud Config ; Configserver  -->
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-starter-config</artifactId>-->
+<!--		</dependency>-->
+
+		<!--- 10.1-   placer la configuration unique ds application.properties  -->
+
+
+
+	</dependencies>
+
+	<!--- 6.1 Placer dependency Management de Eureka Client , ensuite ajouter la version plus haut ds properties -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- Dependance a placer pour packager  -->
+			<!--			./mvnw package -->
+			<!--			java -jar .\target\job-service-0.0.1-SNAPSHOT.jar-->
+
+			<!--	pour tester congigserver-service-0.0.1-SNAPSHOT.jar -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version> <!-- Assurez-vous que la version est correcte -->
+				<configuration>
+					<failIfNoTests>false</failIfNoTests> <!-- Optionnel: permet de ne pas échouer si aucun test n'est trouvé -->
+					<encoding>UTF-8</encoding>
+				</configuration>
+
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
+
+
+<!-- Start.spring.io , Java , Maven , 3.3.3 , jar , 22 , : Spring Web  -->
